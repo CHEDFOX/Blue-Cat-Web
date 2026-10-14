@@ -61,6 +61,20 @@ test("real US regulation is flagged as attested only at its CFR edition date", a
   await expect(first.locator('[data-code="ATTESTED_ONLY_AT"]')).toBeVisible();
 });
 
+test("real UK law: territorial extent and full version history", async ({ page }) => {
+  await page.goto("/?q=dishonestly+appropriates+property&jurisdiction=GB-ENG&as_of=2020-01-01");
+  await expect(page.getByTestId("result").first().locator(".citation")).toContainText("Theft Act 1968, s 1");
+  await page.goto("/?q=dishonestly+appropriates+property&jurisdiction=GB-SCT&as_of=2020-01-01");
+  await expect(page.getByTestId("result").filter({ hasText: "Theft Act 1968" })).toHaveCount(0);
+  const uri = "/gb/ukpga/1968/60/~section-15";
+  await page.goto(`/provision?uri=${encodeURIComponent(uri)}&as_of=2006-06-01`);
+  await expect(page.getByTestId("status-on-date")).toHaveText("in force");
+  await expect(page.getByTestId("exact-text")).toContainText("deception");
+  if (shots) await page.screenshot({ path: `${shots}/uk-point-in-time.png`, fullPage: false });
+  await page.goto(`/provision?uri=${encodeURIComponent(uri)}&as_of=2008-01-01`);
+  await expect(page.getByTestId("status-on-date")).toHaveText("repealed");
+});
+
 test("cross-lingual search groups equally authentic language versions", async ({ page }) => {
   await page.goto("/?q=erasure&jurisdiction=XB&as_of=2024-01-01");
   const card = page.getByTestId("result").filter({ hasText: "al. 3" }).first();

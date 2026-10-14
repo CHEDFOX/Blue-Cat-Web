@@ -26,8 +26,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </header>
         <div className="notice" role="note">
           <div className="container">
-            Research aid, not legal advice. Coverage is a <strong>small sample</strong>: part of US federal law (official
-            GPO files) plus fictional test jurisdictions. Verify every authority against the official source.
+            Research aid, not legal advice. Coverage is a <strong>small sample</strong>: selected UK legislation with full
+            history, part of US federal law, and fictional test jurisdictions. Verify every authority against the
+            official source.
           </div>
         </div>
         <main>

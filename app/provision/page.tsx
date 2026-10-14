@@ -20,7 +20,8 @@ export default async function ProvisionPage({ searchParams }: Props) {
   const uri = one(params.uri);
   const asOf = ISO_DATE.test(one(params.as_of)) ? one(params.as_of) : "";
   const language = /^[a-z]{2,3}$/.test(one(params.language)) ? one(params.language) : "";
-  if (!uri.startsWith("/akn/")) {
+  // Provision URIs are root-relative identifiers in any jurisdiction's scheme (/akn/…, /us/…, /gb/…).
+  if (!/^\/[a-z][a-z0-9-]*\/[^\s]+~[^\s]+$/.test(uri)) {
     return <p className="error">A provision URI is required.</p>;
   }
 
