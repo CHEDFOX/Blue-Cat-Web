@@ -157,6 +157,9 @@ export function ResultCard({ hit, asOf }: { hit: SearchHit; asOf: string }) {
         <p className="mono">
           final {hit.score.final} = lexical {hit.score.lexical} × authority {hit.score.authority_weight}
           {hit.score.matched_via === "concept_expansion" ? " × 0.8 (concept expansion)" : ""}
+          {hit.score.length_factor !== undefined && hit.score.length_factor < 1
+            ? ` × ${hit.score.length_factor} (long passage)`
+            : ""}
         </p>
       </details>
     </article>

@@ -5,8 +5,8 @@ backend, data model and design documents are in
 [`Blue-Cat-Backend`](https://github.com/CHEDFOX/Blue-Cat-Backend) (start with
 `docs/architecture.md`).
 
-> Research aid, not legal advice. The current corpus is **fictional test data**; no real
-> jurisdiction is indexed yet.
+> Research aid, not legal advice. Coverage is a small sample: part of US federal law (official
+> GPO files) plus fictional test jurisdictions.
 
 ## Features
 

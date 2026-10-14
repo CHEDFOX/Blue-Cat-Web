@@ -67,6 +67,15 @@ export default async function SearchPage({ searchParams }: Props) {
             <input type="date" name="as_of" defaultValue={form.asOf} />
           </label>
           <label>
+            Question language
+            <select name="query_language" defaultValue={form.queryLanguage}>
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="any">Any (wider cross-lingual matching)</option>
+            </select>
+          </label>
+          <label>
             Forum court (optional)
             <select name="forum_court" defaultValue={form.forumCourt}>
               <option value="">Not specified</option>

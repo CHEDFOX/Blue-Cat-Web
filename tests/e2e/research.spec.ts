@@ -40,6 +40,27 @@ test("a jurisdiction without a corpus says so instead of answering", async ({ pa
   await expect(page.getByText("This is not evidence that no law applies")).toBeVisible();
 });
 
+test("real US federal law: enacted statute with citation, presumed effective date and no pre-enactment hit", async ({
+  page,
+}) => {
+  await page.goto("/?q=women+STEM+disciplines&jurisdiction=US&as_of=2018-01-01");
+  const first = page.getByTestId("result").first();
+  await expect(first.locator(".citation")).toContainText("Pub. L. No. 115-6");
+  await expect(first.locator(".citation")).toContainText("131 Stat. 11 (2017)");
+  await expect(first.locator('[data-code="EFFECTIVE_DATE_PRESUMED"]')).toBeVisible();
+  await expect(first.locator(".tag.fictional")).toHaveCount(0);
+  if (shots) await page.screenshot({ path: `${shots}/us-public-law.png`, fullPage: false });
+  await page.goto("/?q=women+STEM+disciplines&jurisdiction=US&as_of=2016-01-01");
+  await expect(page.getByTestId("result")).toHaveCount(0);
+});
+
+test("real US regulation is flagged as attested only at its CFR edition date", async ({ page }) => {
+  await page.goto("/?q=licensed+importer+records+of+firearms&jurisdiction=US&as_of=2018-06-01");
+  const first = page.getByTestId("result").first();
+  await expect(first.locator(".citation")).toContainText("27 C.F.R. § 478.");
+  await expect(first.locator('[data-code="ATTESTED_ONLY_AT"]')).toBeVisible();
+});
+
 test("cross-lingual search groups equally authentic language versions", async ({ page }) => {
   await page.goto("/?q=erasure&jurisdiction=XB&as_of=2024-01-01");
   const card = page.getByTestId("result").filter({ hasText: "al. 3" }).first();

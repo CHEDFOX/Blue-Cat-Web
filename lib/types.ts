@@ -96,7 +96,7 @@ export interface SearchHit {
   citation: string;
   authority: Authority;
   source: SourceInfo;
-  score: { final: number; lexical: number; authority_weight: number; matched_via: string };
+  score: { final: number; lexical: number; authority_weight: number; length_factor?: number; matched_via: string };
   parallel_versions?: ParallelVersion[];
   timeline?: TimelineEntry[];
   treatment?: { judicial: Treatment[]; legislative: Treatment[] } | Treatment[];

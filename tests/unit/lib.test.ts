@@ -24,6 +24,7 @@ describe("parseSearchForm", () => {
       includeProposed: true,
       includeProspective: false,
       includeHistorical: false,
+      queryLanguage: "en",
       limit: 20,
     });
   });
@@ -44,7 +45,9 @@ describe("parseSearchForm", () => {
 describe("buildSearchParams", () => {
   it("only sends set options", () => {
     const p = buildSearchParams(parseSearchForm({ q: "privacy" }));
-    expect(p.toString()).toBe("q=privacy&limit=10");
+    expect(p.toString()).toBe("q=privacy&limit=10&query_language=en");
+    const anyLang = buildSearchParams(parseSearchForm({ q: "privacy", query_language: "any" }));
+    expect(anyLang.has("query_language")).toBe(false);
     const full = buildSearchParams(
       parseSearchForm({ q: "privacy", jurisdiction: "XB", as_of: "2024-01-01", include_historical: "on" }),
     );
@@ -54,6 +57,7 @@ describe("buildSearchParams", () => {
       jurisdiction: "XB",
       as_of: "2024-01-01",
       include_historical: "true",
+      query_language: "en",
     });
   });
 });
