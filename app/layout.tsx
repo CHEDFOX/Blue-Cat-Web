@@ -19,6 +19,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               Blue Cat · ULIS
             </Link>
             <nav aria-label="Main">
+              <Link href="/research" className="nav-primary">
+                Research assistant
+              </Link>
               <Link href="/">Search</Link>
               <Link href="/coverage">Coverage &amp; sources</Link>
             </nav>

@@ -21,6 +21,7 @@ backend, data model and design documents are in
   date, its status on that date and its full version history.
 - **Coverage and sources** (`/coverage`): what is actually indexed per jurisdiction, known
   gaps, and each source's licence-review status.
+- **Research assistant** (`/research`, invite-only): see [`docs/early-access.md`](docs/early-access.md).
 
 ## Security
 

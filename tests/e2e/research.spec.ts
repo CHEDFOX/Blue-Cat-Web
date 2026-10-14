@@ -1,5 +1,12 @@
 import { expect, test } from "@playwright/test";
 
+import { backendAvailable } from "./backend";
+
+// These tests need the ULIS API with the sample corpus; skip cleanly when it is not running.
+test.beforeAll(async () => {
+  test.skip(!(await backendAvailable()), "ULIS backend not reachable (GET $ULIS_API_URL/health); start it to run the search tests");
+});
+
 const shots = process.env.E2E_SCREENSHOT_DIR;
 
 test("returns the version in force on the requested date, with exact text and limitations", async ({ page }) => {

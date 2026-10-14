@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { LimitationList } from "@/components/LimitationList";
 import { ResultCard } from "@/components/ResultCard";
 import { ApiError, api } from "@/lib/api";
@@ -37,6 +39,18 @@ export default async function SearchPage({ searchParams }: Props) {
 
   return (
     <>
+      <aside className="cta" aria-label="Research assistant">
+        <div>
+          <strong>New: research assistant (early access)</strong>
+          <p className="meta">
+            Describe a case and get guidance that cites only retrieved authorities, with every quote re-checked.
+          </p>
+        </div>
+        <Link className="button-link" href="/research">
+          Open the research assistant
+        </Link>
+      </aside>
+
       <h1>Legal research</h1>
       <p className="lede">
         Search primary sources as they stood on a given date, filtered by jurisdiction, with exact citations and

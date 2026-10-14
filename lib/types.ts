@@ -190,3 +190,104 @@ export interface SourceDescriptor {
   licence: { id: string; name: string; review_status: string; automated_processing: string; notes?: string | null };
   known_limitations: string[];
 }
+
+// ---------------------------------------------------------------------------
+// Research assistant (backend `POST /v1/research`, `GET /v1/research/{id}`).
+// Contract owned by the backend; the UI parses it defensively (lib/research.ts).
+// ---------------------------------------------------------------------------
+
+export type ResearchDepth = "standard" | "deep";
+export type ResearchStatus = "queued" | "running" | "completed" | "failed" | "refused";
+export type ResearchStage = "understanding" | "searching" | "drafting" | "verifying";
+export type Confidence = "high" | "medium" | "low";
+
+export interface ResearchRequest {
+  question: string;
+  case_text: string | null;
+  jurisdiction: string | null;
+  as_of: string | null;
+  depth: ResearchDepth;
+}
+
+export interface ResearchProgress {
+  at: string;
+  stage: ResearchStage;
+  message: string;
+}
+
+export interface UnderstandingJurisdiction {
+  id: string;
+  reason: string;
+  covered: boolean;
+}
+
+export interface UnderstandingIssue {
+  id: string;
+  title: string;
+  area_of_law: string;
+  question: string;
+}
+
+export interface ResearchUnderstanding {
+  summary: string;
+  facts: string[];
+  as_of: string | null;
+  jurisdictions: UnderstandingJurisdiction[];
+  issues: UnderstandingIssue[];
+}
+
+export interface ReasoningItem {
+  text: string;
+  authority_ids: string[];
+}
+
+export interface GuidanceIssue {
+  issue_id: string;
+  conclusion: string;
+  confidence: Confidence;
+  reasoning: ReasoningItem[];
+  uncertainties: string[];
+}
+
+export interface ResearchGuidance {
+  summary: string;
+  issues: GuidanceIssue[];
+  next_steps: string[];
+}
+
+export interface ResearchAuthority {
+  id: string;
+  citation: string;
+  uri: string;
+  jurisdiction: string;
+  kind: "provision" | "judgment_paragraph";
+  text: string;
+  text_sha256: string;
+  valid_from: string | null;
+  valid_to: string | null;
+  authority_label: string;
+  limitations: Limitation[];
+  source: { name: string; url: string | null; attribution: string | null };
+  verified: boolean;
+}
+
+export interface ResearchResult {
+  understanding: ResearchUnderstanding;
+  guidance: ResearchGuidance;
+  authorities: ResearchAuthority[];
+  coverage_notes: string[];
+  removed_claims: number;
+  limitations: Limitation[];
+  disclaimer: string;
+  usage: { searches: number; model: string; input_tokens: number; output_tokens: number };
+}
+
+export interface ResearchJob {
+  id: string;
+  status: ResearchStatus;
+  created_at: string | null;
+  expires_at: string | null;
+  progress: ResearchProgress[];
+  result: ResearchResult | null;
+  error: { code: string; message: string } | null;
+}
