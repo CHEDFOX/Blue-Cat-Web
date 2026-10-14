@@ -75,6 +75,19 @@ test("real UK law: territorial extent and full version history", async ({ page }
   await expect(page.getByTestId("status-on-date")).toHaveText("repealed");
 });
 
+test("real Canadian law in both official languages", async ({ page }) => {
+  await page.goto("/?q=right+to+be+given+access+to+any+record&jurisdiction=CA&as_of=2026-07-01&query_language=en");
+  const first = page.getByTestId("result").first();
+  await expect(first.locator(".citation")).toContainText("Access to Information Act, RSC 1985, c A-1, s 4");
+  await expect(first.locator('[data-code="OFFICIAL_CONSOLIDATION_REPRODUCED"]')).toHaveCount(1); // info notes are collapsed
+  await page.goto("/?q=droit+d%E2%80%99acc%C3%A8s+aux+documents&jurisdiction=CA&as_of=2026-07-01&query_language=fr");
+  await expect(page.getByTestId("result").first().locator(".citation")).toContainText("LRC 1985, c A-1, art 4");
+  if (shots) await page.screenshot({ path: `${shots}/canada-bilingual.png`, fullPage: false });
+  const uri = "/ca/act/a-1/~section-4-1";
+  await page.goto(`/provision?uri=${encodeURIComponent(uri)}&as_of=2010-01-01&language=en`);
+  await expect(page.getByTestId("status-on-date")).toContainText("history not indexed");
+});
+
 test("cross-lingual search groups equally authentic language versions", async ({ page }) => {
   await page.goto("/?q=erasure&jurisdiction=XB&as_of=2024-01-01");
   const card = page.getByTestId("result").filter({ hasText: "al. 3" }).first();
